@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_marginBottom="12dp"
+    android:elevation="4dp"
+    android:clipToOutline="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/gradient_backgroud"
+        android:padding="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/tvMatkul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/matkul_sample"
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvLabelHari"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hari Kuliah :"
+            android:textSize="14sp"
+            android:textColor="#101828"
+            android:textStyle="bold"
+            android:fontFamily="@font/archivo_medium"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvHari"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Senin"
+            android:layout_marginLeft="3dp"
+            android:textSize="14sp"
+            android:textColor="#667085"
+            android:fontFamily="@font/archivo_regular"/>
+        <TextView
+            android:id="@+id/tvLabelJam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Jam Kuliah :"
+            android:textSize="14sp"
+            android:textColor="#101828"
+            android:textStyle="bold"
+            android:fontFamily="@font/archivo_medium"
+            android:layout_marginBottom="4dp"/>
+            
+        <TextView
+            android:id="@+id/tvJam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13.00"
+            android:layout_marginLeft="3dp"
+            android:textSize="14sp"
+            android:textColor="#667085"
+            android:fontFamily="@font/archivo_regular"/>
+    </LinearLayout>
+</LinearLayout>

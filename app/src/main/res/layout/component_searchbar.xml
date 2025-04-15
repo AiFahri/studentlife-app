@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/etSearch"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:hint="Cari jadwal kamu..."
+    android:fontFamily="@font/archivo_medium"
+    android:textSize="14sp"
+    android:textColorHint="#667085"
+    android:textColor="#101828"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:drawableStart="@drawable/ic_search_scaled"
+    android:background="@drawable/bg_search"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp" />
