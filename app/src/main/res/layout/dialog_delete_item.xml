@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/border_grey"
+    android:gravity="center_horizontal"
+    android:layout_margin="16dp"
+    android:clipToOutline="true">
+
+    <TextView
+        android:id="@+id/modalTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hapus item berikut?"
+        android:textSize="18sp"
+        android:textColor="#101828"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/modalMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Item ini akan dihapus dari daftar kuliahmu."
+        android:textSize="14sp"
+        android:textColor="#667085"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Batal"
+            android:textColor="#667085"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="10dp"/>
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hapus"
+            android:textColor="#ffffff"
+            android:background="#D32F2F"
+            android:padding="10dp"/>
+    </LinearLayout>
+</LinearLayout>
