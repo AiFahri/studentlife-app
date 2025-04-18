@@ -2,7 +2,10 @@ package com.example.studentlife
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -20,6 +23,8 @@ class DetailJadwalActivity : AppCompatActivity() {
     private lateinit var tvJam: TextView
     private lateinit var btnSimpan: Button
     private lateinit var btnBack: ImageButton
+    private lateinit var imgPreview: ImageView
+    private var imageUriStr: String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +40,23 @@ class DetailJadwalActivity : AppCompatActivity() {
         val matkul = intent.getStringExtra("matkul") ?: "Mata Kuliah Kosong"
         val hari = intent.getStringExtra("hari") ?: "-"
         val jam = intent.getStringExtra("jam") ?: "-"
-
+        imageUriStr = intent.getStringExtra("image_uri")
+        Log.d("DetailJadwal", "Diterima URI: $imageUriStr")
         tvMatkul = findViewById(R.id.tvMatkul)
         tvHari = findViewById(R.id.tvHari)
         tvJam = findViewById(R.id.tvJam)
         btnSimpan = findViewById(R.id.btnSimpan)
+        imgPreview = findViewById(R.id.imgPreview)
+        val imageUriStr = intent.getStringExtra("image_uri")
+        if (!imageUriStr.isNullOrBlank()) {
+            imgPreview.visibility = View.VISIBLE
+            try {
+                imgPreview.setImageURI(Uri.parse(imageUriStr))
+            } catch (e: Exception) {
+                Log.e("DetailJadwal", "Error parsing image_uri: $imageUriStr", e)
+                imgPreview.visibility = View.GONE
+            }
+        }
         val iconBack = findViewById<ImageView>(R.id.iconBack)
         val tvGreetingSub = findViewById<TextView>(R.id.tvSubtext)
         tvGreetingSub.text = "Check ulang sebelum menyimpan data, ya!"
@@ -47,7 +64,9 @@ class DetailJadwalActivity : AppCompatActivity() {
         tvMatkul.text = matkul
         tvHari.text = hari
         tvJam.text = jam
-
+        if (!imageUriStr.isNullOrEmpty()) {
+            imgPreview.setImageURI(Uri.parse(imageUriStr))
+        }
 
         iconBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -62,8 +81,12 @@ class DetailJadwalActivity : AppCompatActivity() {
             resultIntent.putExtra("saved_matkul", matkul)
             resultIntent.putExtra("saved_hari", hari)
             resultIntent.putExtra("saved_jam", jam)
+            resultIntent.putExtra("saved_image", imageUriStr)
+            resultIntent.putExtra("isEdit", intent.getBooleanExtra("isEdit", false))
+            resultIntent.putExtra("position",    intent.getIntExtra("position", -1))
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
         }
+
     }
 }
