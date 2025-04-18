@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_gravity="center"
     android:padding="24dp"
     android:background="@drawable/border_grey"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:layout_margin="16dp"
     android:clipToOutline="true">
 
@@ -37,24 +38,26 @@
         android:gravity="center"
         android:layout_marginTop="16dp">
 
-        <Button
-            android:id="@+id/btnCancel"
+        <androidx.appcompat.widget.AppCompatButton            android:id="@+id/btnCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Batal"
+            android:textAllCaps="false"
             android:textColor="#667085"
-            android:background="?android:attr/selectableItemBackground"
+            android:background="@drawable/border_grey"
             android:padding="10dp"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnDelete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Hapus"
+            android:textAllCaps="false"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/red_background_button"
             android:textColor="#ffffff"
-            android:background="#D32F2F"
             android:padding="10dp"/>
     </LinearLayout>
 </LinearLayout>
