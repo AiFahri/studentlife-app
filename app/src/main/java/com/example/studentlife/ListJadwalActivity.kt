@@ -2,6 +2,7 @@ package com.example.studentlife
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
@@ -34,11 +35,22 @@ class ListJadwalActivity : AppCompatActivity() {
             val matkul = result.data?.getStringExtra("saved_matkul") ?: return@registerForActivityResult
             val hari = result.data?.getStringExtra("saved_hari") ?: return@registerForActivityResult
             val jam = result.data?.getStringExtra("saved_jam") ?: return@registerForActivityResult
-            val jadwalBaru = JadwalModel(matkul, hari, jam)
-            listJadwal.add(jadwalBaru)
-            adapter.notifyItemInserted(listJadwal.size - 1)
+            val imageUri = result.data?.getStringExtra("saved_image")
+            val isEdit = result.data?.getBooleanExtra("isEdit", false) ?: false
+            val position = result.data?.getIntExtra("position", -1) ?: -1
+
+            val updatedJadwal = JadwalModel(matkul, hari, jam, imageUri)
+
+            if (isEdit && position >= 0) {
+                listJadwal[position] = updatedJadwal
+                adapter.notifyItemChanged(position)
+            } else {
+                listJadwal.add(updatedJadwal)
+                adapter.notifyItemInserted(listJadwal.size - 1)
+            }
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +65,23 @@ class ListJadwalActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.rvJadwal)
         btnAdd = findViewById(R.id.btnAdd)
 
-        adapter = JadwalAdapter(this, listJadwal) { position ->
-            showDeleteConfirmationDialog(position)
-        }
+        adapter = JadwalAdapter(this, listJadwal,
+            onDeleteClick = { position -> showDeleteConfirmationDialog(position) },
+            onItemClick = { position ->
+                val item = listJadwal[position]
+                val intent = Intent(this, TambahJadwalActivity::class.java).apply {
+                    putExtra("edit_matkul", item.namaMatkul)
+                    putExtra("edit_hari", item.hari)
+                    putExtra("edit_jam", item.jam)
+                    putExtra("position", position)
+                    item.imageUri?.takeIf { it.isNotBlank() }?.let { uriStr ->
+                        putExtra("edit_image", uriStr)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                }
+                tambahJadwalLauncher.launch(intent)
+            }
+        )
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
