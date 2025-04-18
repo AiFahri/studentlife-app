@@ -122,9 +122,58 @@
                         android:layout_height="48dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/bg_spinner" />
-                </LinearLayout>
-            </LinearLayout>
 
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unggah Foto"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:id="@+id/uploadBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_upload_box"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="24dp"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:id="@+id/previewImage"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_upload" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/uploadText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Unggah "
+                        android:textColor="#667085"/>
+
+                    <TextView
+                        android:id="@+id/uploadClick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="di sini"
+                        android:textColor="#5945FC"
+                        android:textStyle="bold"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+            </LinearLayout>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnPratinjau"
                 android:layout_width="match_parent"
