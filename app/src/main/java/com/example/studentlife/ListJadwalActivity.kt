@@ -74,7 +74,7 @@ class ListJadwalActivity : AppCompatActivity() {
             .setView(dialogView)
             .setCancelable(true)
             .create()
-
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.show()
 
         val btnCancel: Button = dialogView.findViewById(R.id.btnCancel)
