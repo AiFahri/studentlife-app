@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Warna Background -->
+  <solid android:color="#5945FC"/>
+
+  <!-- Gradient Overlay -->
+  <gradient
+      android:angle="90"
+      android:startColor="#5945FC"
+      android:endColor="#8A7CFD"
+      android:gradientRadius="200"
+      android:centerX="0.5"
+      android:centerY="0.5"
+      android:type="linear"
+      android:useLevel="true"
+      android:alpha="76"/>
+
+  <!-- Radius Sudut -->
+  <corners android:radius="8dp"/>
+</shape>
