@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:paddingLeft="16dp"
+    android:paddingTop="48dp"
+    android:paddingRight="16dp"
+    tools:context=".TambahPengeluaranActivity">
+
+    <!-- Button Back -->
+    <FrameLayout
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iconBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:contentDescription="Back Icon"
+            android:src="@drawable/ic_back" />
+    </FrameLayout>
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tambah_pengeluaran"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/archivo_medium"
+        android:gravity="center"
+        android:text="Tambah Pengeluaran Harian"
+        android:textColor="#101828"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="@id/btnBack" />
+
+    <!-- Greeting Card -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_box"
+        android:padding="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack">
+
+        <ImageView
+            android:id="@+id/iconUser"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="User Icon"
+            android:src="@drawable/ic_coffee"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/archivo_medium"
+            android:text="Halo, User 👋"
+            android:textColor="#101828"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/iconUser"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSubtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/archivo_regular"
+            android:text="Tambahkan data pengeluaran di bawah, ya!"
+            android:textColor="#667085"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/tvGreeting"
+            app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Form Container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/containerText">
+
+        <!-- Nama Pengeluaran -->
+        <TextView
+            android:id="@+id/label_nama_pengeluaran"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/archivo_regular"
+            android:text="Nama Pengeluaran"
+            android:textColor="#101828"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/form_nama"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_nama_pengeluaran">
+
+            <ImageView
+                android:id="@+id/iconNama"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_wallet" />
+
+            <EditText
+                android:id="@+id/editNamaPengeluaran"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/iconNama"
+                android:background="@android:color/transparent"
+                android:hint="Masukkan nama pengeluaran"
+                android:fontFamily="@font/archivo_regular"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="#101828"
+                android:textColorHint="#667085"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <!-- Jumlah Uang -->
+        <TextView
+            android:id="@+id/label_jumlah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/archivo_regular"
+            android:text="Jumlah Uang"
+            android:textColor="#101828"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/form_nama" />
+
+        <RelativeLayout
+            android:id="@+id/form_jumlah"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_jumlah">
+
+            <ImageView
+                android:id="@+id/iconUang"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_money" />
+
+            <EditText
+                android:id="@+id/editJumlahPengeluaran"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/iconUang"
+                android:background="@android:color/transparent"
+                android:hint="Masukkan jumlah uang"
+                android:fontFamily="@font/archivo_regular"
+                android:inputType="number"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="#101828"
+                android:textColorHint="#667085"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <!-- Unggah Foto -->
+        <TextView
+            android:id="@+id/label_unggah_foto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/archivo_regular"
+            android:text="Unggah Foto"
+            android:textColor="#101828"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/form_jumlah" />
+
+        <RelativeLayout
+            android:id="@+id/form_unggah_foto"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_box"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_unggah_foto">
+
+            <!-- Container untuk icon dan teks upload -->
+            <LinearLayout
+                android:id="@+id/uploadContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- Ikon upload -->
+                <ImageView
+                    android:id="@+id/iconUpload"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_upload" />
+
+                <!-- Teks untuk instruksi upload -->
+                <TextView
+                    android:id="@+id/tvUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unggah file di sini"
+                    android:textColor="#667085"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/archivo_regular"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- ImageView untuk menampilkan gambar yang dipilih -->
+            <ImageView
+                android:id="@+id/ivImagePengeluaran"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Tombol Pratinjau -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPratinjau"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_btn"
+        android:fontFamily="@font/archivo_medium"
+        android:text="Pratinjau"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/containerForm" />
+</androidx.constraintlayout.widget.ConstraintLayout>
