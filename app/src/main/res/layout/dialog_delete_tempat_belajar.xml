@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_modal_delete"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:elevation="8dp">
+
+    <TextView
+        android:id="@+id/tvModalTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hapus Tempat Belajar?"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#101828"
+        android:fontFamily="@font/archivo_medium"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/tvModalDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Data yang dihapus tidak dapat dikembalikan"
+        android:textSize="14sp"
+        android:textColor="#667085"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/archivo_regular"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnCancelDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Batal"
+            android:background="@drawable/button_batal"
+            android:textColor="#667085"
+            android:fontFamily="@font/archivo_medium" />
+
+        <Button
+            android:id="@+id/btnConfirmDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hapus"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_cancel"
+            android:fontFamily="@font/archivo_medium"
+            android:layout_marginStart="12dp"/>
+    </LinearLayout>
+</LinearLayout>
