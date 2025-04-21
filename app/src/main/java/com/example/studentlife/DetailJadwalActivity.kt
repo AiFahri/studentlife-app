@@ -58,6 +58,9 @@ class DetailJadwalActivity : AppCompatActivity() {
             }
         }
         val iconBack = findViewById<ImageView>(R.id.iconBack)
+        val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        val username = intent.getStringExtra("userEmail")
+        tvGreeting.text = "Halo, User 👋"
         val tvGreetingSub = findViewById<TextView>(R.id.tvSubtext)
         tvGreetingSub.text = "Check ulang sebelum menyimpan data, ya!"
 

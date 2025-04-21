@@ -41,7 +41,11 @@ class TaskList : ComponentActivity() {
         recyclerView.adapter = taskAdapter
 
         val btnAdd = findViewById<ImageView>(R.id.btn_add)
+        val iconBack = findViewById<ImageView>(R.id.iconBack)
 
+        iconBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         btnAdd.setOnClickListener {
             val intent = Intent(this, TaskAdd::class.java)
             startActivityForResult(intent, 1)

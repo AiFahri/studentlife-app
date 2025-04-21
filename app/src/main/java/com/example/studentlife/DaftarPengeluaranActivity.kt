@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,11 @@ class DaftarPengeluaranActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewPengeluaran)
         btnAdd = findViewById(R.id.btnAdd) // tombol +
+        val iconBack = findViewById<ImageView>(R.id.iconBack)
+
+        iconBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         // 1️⃣ Inisialisasi list dan tambahkan data dummy
         pengeluaranList = mutableListOf(

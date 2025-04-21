@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -65,6 +66,12 @@ class ListJadwalActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.rvJadwal)
         btnAdd = findViewById(R.id.btnAdd)
 
+        val dummyData = listOf(
+            JadwalModel("Pengembangan Aplikasi Mobile", "Senin", "07.00", null),
+            JadwalModel("Kriptografi", "Selasa", "09.00", null),
+            JadwalModel("Blockchain", "Rabu", "13.00", null)
+        )
+        listJadwal.addAll(dummyData)
         adapter = JadwalAdapter(this, listJadwal,
             onDeleteClick = { position -> showDeleteConfirmationDialog(position) },
             onItemClick = { position ->
@@ -84,7 +91,11 @@ class ListJadwalActivity : AppCompatActivity() {
         )
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+        val iconBack = findViewById<ImageView>(R.id.iconBack)
 
+        iconBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         btnAdd.setOnClickListener {
             val intent = Intent(this, TambahJadwalActivity::class.java)
             tambahJadwalLauncher.launch(intent)
@@ -117,5 +128,4 @@ class ListJadwalActivity : AppCompatActivity() {
             dialog.dismiss()
         }
     }
-
 }

@@ -83,6 +83,9 @@ class TambahJadwalActivity : AppCompatActivity() {
         Log.d("TambahJadwal", "onCreate edit_image = ${intent.getStringExtra("edit_image")}")
         uploadClick = findViewById(R.id.uploadClick)
         uploadClick.paintFlags = uploadClick.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        val tvGreeting = findViewById<TextView>(R.id.tvGreeting)
+        val username = intent.getStringExtra("userEmail")
+        tvGreeting.text = "Halo, User 👋"
         val iconBack = findViewById<ImageView>(R.id.iconBack)
         val tvTitle = findViewById<TextView>(R.id.tvTitle)
         val hariOptions = listOf("Senin", "Selasa", "Rabu", "Kamis", "Jumat")

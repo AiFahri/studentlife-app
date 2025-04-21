@@ -69,7 +69,11 @@ class TambahPengeluaranActivity : AppCompatActivity() {
         // Tombol Pilih Gambar
         tvUpload.setOnClickListener { openGallery() }
         findViewById<View>(R.id.form_unggah_foto).setOnClickListener { openGallery() }
+        val iconBack = findViewById<ImageView>(R.id.iconBack)
 
+        iconBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         // Tombol Pratinjau (menggunakan button untuk proses simpan/edit)
         btnPratinjau.setOnClickListener {
             val nama = editNamaPengeluaran.text.toString().trim()
