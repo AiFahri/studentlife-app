@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_back"
+                android:background="@drawable/bg_circle"
+                android:padding="10dp"
+                android:contentDescription="@string/back"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:text="@string/add_new_task_text"
+                android:textColor="#101828"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/card_greeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_layout"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/coffee_greeting_icon"
+                android:src="@drawable/ic_coffee"
+                app:tint="@null" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/halo_user_text"
+                    android:textColor="#101828"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_more_task_text"
+                    android:textColor="#6D6E8C"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/label_nama"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_greeting"
+            android:layout_marginTop="32dp"
+            android:text="@string/task_name"
+            android:textColor="#101828"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/input_nama_container"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/label_nama"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="12dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/library_books"
+                android:contentDescription="@string/document_icon"
+                app:tint="@null" />
+
+            <EditText
+                android:id="@+id/input_nama"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:hint="@string/add_task_name_hint"
+                android:background="@null"
+                android:textColorHint="#6D6E8C"
+                android:textSize="14sp"
+                android:inputType="text"
+                android:padding="0dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/label_deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_nama_container"
+            android:layout_marginTop="16dp"
+            android:text="@string/deadline_text"
+            android:textColor="#101828"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/input_deadline_container"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/label_deadline"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="12dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/calendar_today"
+                android:contentDescription="@string/calendar_icon"
+                app:tint="@null" />
+
+            <LinearLayout
+                android:id="@+id/input_deadline_container2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    android:id="@+id/input_deadline"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:text="@string/choose_date_text"
+                    android:textColor="#6D6E8C"
+                    android:textSize="14sp"
+                    tools:ignore="NestedWeights" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@string/ic_drop_down"
+                    android:src="@drawable/ic_dropdown"
+                    app:tint="#6D6E8C" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/label_deskripsi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_deadline_container"
+            android:layout_marginTop="16dp"
+            android:text="@string/task_description_text"
+            android:textColor="#101828"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/input_deskripsi"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_below="@id/label_deskripsi"
+            android:layout_marginTop="8dp"
+            android:autofillHints=""
+            android:background="@drawable/bg_input"
+            android:gravity="top"
+            android:hint="@string/add_task_description_hint"
+            android:padding="12dp"
+            android:textColorHint="#6D6E8C"
+            android:inputType="textMultiLine"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/label_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input_deskripsi"
+            android:layout_marginTop="16dp"
+            android:text="Unggah Foto"
+            android:textColor="#101828"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/upload_container"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_below="@id/label_upload"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_input"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/ic_upload"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/upload"
+                android:contentDescription="Upload Icon"
+                app:tint="@null" />
+
+            <TextView
+                android:id="@+id/text_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/unggah_file_disini"
+                android:textSize="14sp"
+                android:textColor="#6D6E8C" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_pratinjau"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/upload_container"
+            android:layout_marginTop="32dp"
+            android:text="@string/save_text"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/bg_save"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:padding="12dp" />
+    </RelativeLayout>
+</ScrollView>
