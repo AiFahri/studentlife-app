@@ -40,7 +40,7 @@ Student Life adalah aplikasi yang dirancang untuk membantu mahasiswa dalam menge
 1. Clone repositori ini:
 
    ```bash
-   git clone https://github.com/username/student-life-app.git
+   git clone https://github.com/AiFahri/studentlife-app
    ```
 
 2. Buka proyek di Android Studio.
