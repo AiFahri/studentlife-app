@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_back"
+                android:background="@drawable/bg_circle"
+                android:padding="10dp"
+                android:contentDescription="@string/back"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:text="@string/task_detail"
+                android:textColor="#101828"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/img_success"
+            android:layout_width="122dp"
+            android:layout_height="124dp"
+            android:layout_below="@id/header_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="39dp"
+            android:contentDescription="@string/ic_success"
+            android:src="@drawable/ic_success" />
+
+        <LinearLayout
+            android:id="@+id/card_greeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_success"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/coffee_greeting_icon"
+                android:src="@drawable/ic_coffee"
+                app:tint="@null" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/halo_user_text"
+                    android:textColor="#101828"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/success_add_task"
+                    android:textColor="#6D6E8C"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_task_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_greeting"
+            android:layout_marginTop="32dp"
+            android:text="@string/example_task_title"
+            android:textSize="24sp"
+            android:textColor="#101828" />
+
+        <ImageView
+            android:id="@+id/imgPreview"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_below="@+id/tv_task_title"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:contentDescription="Preview Foto"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/card_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgPreview"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/task_detail"
+                android:textColor="#101828"
+                android:textSize="14sp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="8dp"
+                android:background="#E0E0E0" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/deadline"
+                    android:textColor="#101828"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/deadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/senin_19_00"
+                    android:textColor="#6D6E8C"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/card_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_detail"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deskripsi_tugas"
+                android:textColor="#101828"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/taskDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/lorem_ipsum_dolor_sit_amet_consectetur_non_amet_pretium_nisl_ut_ullamcorper_duis_purus_mauris_ac_nec_sagittis_dictum_sit_eu_fringilla_faucibus_tellus_facilisi_vitae_arcu_morbi_cras_felis_iaculis_ipsum_vulputate_viverra_proin_enim_sem_in_risus"
+                android:textColor="#6D6E8C"
+                android:textSize="12sp"
+                android:justificationMode="inter_word"
+                />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_lanjut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/card_desc"
+            android:layout_marginTop="32dp"
+            android:text="@string/simpan"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_save"
+            android:padding="12dp" />
+
+    </RelativeLayout>
+</ScrollView>
