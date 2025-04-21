@@ -12,11 +12,28 @@
     android:id="@+id/list_jadwal"
     tools:context=".ListJadwalActivity">
 
+    <FrameLayout
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iconBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back Icon"/>
+    </FrameLayout>
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/title_main"
+        android:layout_marginLeft="65dp"
         android:fontFamily="@font/archivo_bold"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -38,6 +55,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="List seluruh jadwal kuliah kamu."
+        android:layout_marginLeft="65dp"
         android:textSize="14sp"
         android:textColor="#888888"
         android:fontFamily="@font/archivo_medium"

@@ -16,13 +16,29 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_circle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/iconBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="Back Icon"/>
+        </FrameLayout>
         <!-- Judul Halaman -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="11dp"
+            android:layout_marginLeft="55dp"
             android:fontFamily="@font/archivo_medium"
             android:text="Daftar Pengeluaran"
             android:textColor="#101828"
@@ -37,6 +53,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="55dp"
             android:fontFamily="@font/archivo_regular"
             android:text="List seluruh pengeluaran kamu."
             android:textColor="#6D6E8C"
