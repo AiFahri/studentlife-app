@@ -40,7 +40,7 @@ Student Life adalah aplikasi yang dirancang untuk membantu mahasiswa dalam menge
 1. Clone repositori ini:
 
    ```bash
-   git clone https://github.com/AiFahri/studentlife-app
+   git clone https://github.com/AiFahri/studentlife-app.git
    ```
 
 2. Buka proyek di Android Studio.
@@ -48,10 +48,6 @@ Student Life adalah aplikasi yang dirancang untuk membantu mahasiswa dalam menge
 3. Pilih perangkat atau emulator untuk menjalankan aplikasi.
 
 4. Klik "Run" untuk memulai aplikasi.
-
-5. Username untuk login : studentlife
-
-6. Password untuk login : 12345678
 
 ## License
 
