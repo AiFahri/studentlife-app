@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.1.0")
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation("androidx.credentials:credentials:1.5.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.5.0")

@@ -36,4 +36,6 @@
     <string name="deadline">Deadline</string>
     <string name="simpan">Simpan</string>
     <string name="unggah_file_disini">Unggah file <b><u>di sini</u></b> </string>
+    <string name="default_web_client_id">893845552612-clf1r9lle56i3hqe9n47tncc2citc45v.apps.googleusercontent.com</string>
+
 </resources>
