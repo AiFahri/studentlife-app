@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "893845552612",
+    "project_id": "studentlifeapp-5c374",
+    "storage_bucket": "studentlifeapp-5c374.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893845552612:android:c420d7bb9c70c01bcf1bf1",
+        "android_client_info": {
+          "package_name": "com.example.studentlife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893845552612-clf1r9lle56i3hqe9n47tncc2citc45v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.studentlife",
+            "certificate_hash": "3bdbda257e956fa29715076e2aa7561a1e54ce22"
+          }
+        },
+        {
+          "client_id": "893845552612-82fma3811h4ti33hsbsf2deo3s5mne97.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5C2Gy8BD7k0tbk_yDtgsCPriWxqLtYX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893845552612-82fma3811h4ti33hsbsf2deo3s5mne97.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

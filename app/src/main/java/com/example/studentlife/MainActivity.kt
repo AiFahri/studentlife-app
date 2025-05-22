@@ -4,26 +4,39 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var etEmail: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var btnLogin: Button
-    private lateinit var cbRemember: CheckBox
-    private lateinit var ivPasswordToggle: ImageView
-    private lateinit var tvForgotPassword: TextView
-    private lateinit var tvRegister: TextView
     private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        val prefs = getSharedPreferences("StudentLifePrefs", MODE_PRIVATE)
+        if (prefs.getBoolean("isLoggedIn", false)) {
+            val email = prefs.getString("userEmail", "User")
+            val intent = Intent(this, MenuActivity::class.java)
+            intent.putExtra("userEmail", email)
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,57 +45,104 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        etEmail = findViewById(R.id.etEmail)
-        etPassword = findViewById(R.id.etPassword)
-        btnLogin = findViewById(R.id.btnLogin)
-        cbRemember = findViewById(R.id.cbRemember)
-        ivPasswordToggle = findViewById(R.id.passwordToggle)
-        tvForgotPassword = findViewById(R.id.tvForgotPassword)
-        tvRegister = findViewById(R.id.tvCreateAccount)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
+        val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val tvRegister = findViewById<TextView>(R.id.tvCreateAccount)
+        val btnGoogleSignIn = findViewById<SignInButton>(R.id.btnGoogleSignIn)
+        val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
-        btnLogin.setOnClickListener { onLoginClick() }
-        ivPasswordToggle.setOnClickListener { togglePasswordVisibility() }
-        tvForgotPassword.setOnClickListener { showToast("Fitur Lupa Password Belum Tersedia") }
-        tvRegister.setOnClickListener { showToast("Fitur Daftar Belum Tersedia") }
-    }
+        btnLogin.setOnClickListener {
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
 
-    private fun onLoginClick() {
-        val email = etEmail.text.toString().trim()
-        val password = etPassword.text.toString().trim()
+            if (email.isEmpty() || password.isEmpty()) {
+                showToast("Email dan password tidak boleh kosong")
+                return@setOnClickListener
+            }
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Email dan Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
-            return
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        with(prefs.edit()) {
+                            putBoolean("isLoggedIn", true)
+                            putString("userEmail", user?.email)
+                            apply()
+                        }
+                        startActivity(Intent(this, MenuActivity::class.java))
+                        finish()
+                    } else {
+                        showToast("Login gagal: ${task.exception?.message}")
+                    }
+                }
         }
 
-        auth.signInWithEmailAndPassword(email, password)
+        tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+        tvForgotPassword.setOnClickListener {
+            val email = etEmail.text.toString().trim()
+            if (email.isEmpty()) {
+                showToast("Masukkan email terlebih dahulu")
+                return@setOnClickListener
+            }
+
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        showToast("Email reset password dikirim ke $email")
+                    } else {
+                        showToast("Gagal mengirim email: ${task.exception?.message}")
+                    }
+                }
+        }
+
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        googleSignInLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    showToast("Login Google gagal: ${e.message}")
+                }
+            }
+
+        btnGoogleSignIn.setOnClickListener {
+            googleSignInLauncher.launch(googleSignInClient.signInIntent)
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val prefs = getSharedPreferences("StudentLifePrefs", MODE_PRIVATE)
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Log.d("FirebaseLogin", "signInWithEmail:success - ${user?.email}")
-                    Toast.makeText(this, "Berhasil Log In", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MenuActivity::class.java)
-                    intent.putExtra("userEmail", user?.email ?: email)
-                    startActivity(intent)
+                    with(prefs.edit()) {
+                        putBoolean("isLoggedIn", true)
+                        putString("userEmail", user?.email)
+                        apply()
+                    }
+                    startActivity(Intent(this, MenuActivity::class.java))
                     finish()
                 } else {
-                    Toast.makeText(this, "Login gagal: ${task.exception?.message}", Toast.LENGTH_LONG).show()
-                    Log.e("LoginError", "signInWithEmail:failure", task.exception)
+                    showToast("Autentikasi Google gagal.")
                 }
             }
     }
 
-    private fun togglePasswordVisibility() {
-        if (etPassword.inputType == android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD) {
-            etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT
-        } else {
-            etPassword.inputType = android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-            ivPasswordToggle.setImageResource(R.drawable.ic_visibility)
-        }
-        etPassword.setSelection(etPassword.text.length)
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
