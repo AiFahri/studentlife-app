@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,11 +16,15 @@
         android:theme="@style/Theme.StudentLife"
         tools:targetApi="31">
         <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -34,8 +39,7 @@
             android:exported="false" />
         <activity
             android:name=".ListJadwalActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".DetailTempatBelajarActivity"
             android:exported="false" />
@@ -44,23 +48,20 @@
             android:exported="false" />
         <activity
             android:name=".ListTempatBelajarActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".DetailPengeluaranActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".TambahPengeluaranActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".DaftarPengeluaranActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".TaskList"
             android:exported="false"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name" />
         <activity android:name=".TaskAdd" />
         <activity android:name=".TaskPreview" />
     </application>
