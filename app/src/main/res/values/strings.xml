@@ -24,7 +24,7 @@
     <string name="calendar_icon">Calendar Icon</string>
     <string name="document_icon">Document Icon</string>
     <string name="add_task_name_hint">Masukkan nama tugas</string>
-    <string name="save_text">Pratinjau</string>
+    <string name="save_text">Simpan</string>
     <string name="ic_drop_down">Dropdown Icon</string>
     <string name="success_add_task">Check ulang sebelum menyimpan data, ya!</string>
     <string name="task_detail">Detail Tugas</string>
