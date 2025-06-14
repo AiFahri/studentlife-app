@@ -1,9 +1,14 @@
 package com.example.studentlife.model
 
-data class JadwalModel(
-    val namaMatkul: String,
-    val hari: String,
-    val jam: String,
-    val imageUri: String? = null
-)
+import com.google.firebase.database.IgnoreExtraProperties
 
+@IgnoreExtraProperties
+data class JadwalModel(
+    var id: String? = null,
+    var userId: String? = null,
+    var namaMatkul: String = "",
+    var hari: String = "",
+    var jam: String = "",
+    var gambarBase64: String? = ""
+) {
+}
