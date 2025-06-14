@@ -1,6 +1,4 @@
 plugins {
-//    alias(libs.plugins.android.application)
-//    alias(libs.plugins.google.gms.google.services)
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
@@ -41,7 +39,6 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
     implementation("com.google.android.gms:play-services-auth:21.1.0")
-    implementation("com.google.firebase:firebase-database:20.3.0")
     implementation("androidx.credentials:credentials:1.5.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")

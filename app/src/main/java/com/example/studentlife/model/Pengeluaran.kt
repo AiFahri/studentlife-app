@@ -1,15 +1,10 @@
 package com.example.studentlife.models
 
 data class Pengeluaran(
-    val nama: String,
-    val jumlah: Int,
-    var imageUri: String = "" // Default value for imageUri is an empty string
+    var id: String? = null,
+    var userId: String? = null, 
+    var nama: String = "",      
+    var jumlah: Int = 0,        
+    var gambarBase64: String = ""
 ) {
-    // The constructor handles the null or empty imageUri to prevent NullPointerException
-    init {
-        if (imageUri.isNullOrEmpty()) {
-            // Make sure imageUri is not null or empty
-            this.imageUri = ""
-        }
-    }
 }

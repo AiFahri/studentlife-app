@@ -1,12 +1,18 @@
 package com.example.studentlife
 
 import android.content.Intent
-import android.net.Uri
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.studentlife.models.Pengeluaran
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import java.text.NumberFormat
 import java.util.*
 
@@ -17,67 +23,131 @@ class DetailPengeluaranActivity : AppCompatActivity() {
     private lateinit var btnSimpan: Button
     private lateinit var btnBack: ImageView
     private lateinit var ivImagePengeluaran: ImageView
+
     private var nama: String? = null
     private var jumlah: Int = 0
-    private var imageUri: Uri? = null
-    private var position: Int = -1
-    private var isEdit: Boolean = false
+    private var imageKey: String? = null
+    private var gambarBase64: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_pengeluaran)
 
-        // Ambil data dari intent
-        val intent = intent
-        nama = intent.getStringExtra("namaPengeluaran")
-        jumlah = intent.getIntExtra("jumlahPengeluaran", 0)
-        val imageUriString = intent.getStringExtra("imageUri")
-        position = intent.getIntExtra("position", -1)
-        isEdit = intent.getBooleanExtra("isEdit", false)
-
-        // Inisialisasi komponen UI
         tvDetailNama = findViewById(R.id.tvDetailNama)
         tvDetailJumlah = findViewById(R.id.tvDetailJumlah)
         btnSimpan = findViewById(R.id.btnSimpan)
         btnBack = findViewById(R.id.iconBack)
         ivImagePengeluaran = findViewById(R.id.imagePengeluaran)
 
-        // Format jumlah ke format Rupiah
+        // Ambil data dari Intent
+        val intent = intent
+        nama = intent.getStringExtra("namaPengeluaran")
+        jumlah = intent.getIntExtra("jumlahPengeluaran", 0)
+        imageKey = intent.getStringExtra("imageKey")
+
         val formatRupiah = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
-        val jumlahFormatted = formatRupiah.format(jumlah)
-
-        // Set data ke tampilan
         tvDetailNama.text = nama
-        tvDetailJumlah.text = jumlahFormatted
+        tvDetailJumlah.text = formatRupiah.format(jumlah)
 
-        // Menampilkan gambar jika ada
-        if (!imageUriString.isNullOrEmpty()) {
-            imageUri = Uri.parse(imageUriString)
-            ivImagePengeluaran.setImageURI(imageUri)
-            ivImagePengeluaran.visibility = ImageView.VISIBLE
-        } else {
-            ivImagePengeluaran.visibility = ImageView.GONE
+        // Load gambar jika ada
+        if (!imageKey.isNullOrEmpty()) {
+            loadImageFromFirebase(imageKey!!)
         }
 
-        // Tombol Simpan → Kirim data kembali ke activity sebelumnya
+        // Tombol untuk simpan pengeluaran ke Firebase
         btnSimpan.setOnClickListener {
-            val resultIntent = Intent()
-            resultIntent.putExtra("namaPengeluaran", nama)
-            resultIntent.putExtra("jumlahPengeluaran", jumlah)
-            resultIntent.putExtra("imageUri", imageUri?.toString() ?: "")
-
-            // Tambahkan position jika ini adalah edit
-            if (position != -1) {
-                resultIntent.putExtra("position", position)
-            }
-
-            setResult(RESULT_OK, resultIntent)
-            finish()
+            simpanKeFirebase()
         }
 
-        // Tombol back
+        // Tombol kembali ke activity sebelumnya
         btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun loadImageFromFirebase(imageKey: String) {
+        val databaseRef = FirebaseDatabase.getInstance().getReference("temp_images").child(imageKey)
+
+        databaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    gambarBase64 = snapshot.child("gambarBase64").getValue(String::class.java) ?: ""
+
+                    if (gambarBase64.isNotEmpty()) {
+                        // Decode dan tampilkan gambar
+                        try {
+                            val decodedBytes = Base64.decode(gambarBase64, Base64.DEFAULT)
+                            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                            ivImagePengeluaran.setImageBitmap(bitmap)
+                            ivImagePengeluaran.visibility = View.VISIBLE
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@DetailPengeluaranActivity, "Gagal memuat gambar", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    // Fungsi untuk menyimpan data ke Firebase
+    private fun simpanKeFirebase() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            Toast.makeText(this, "User belum login", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val uid = currentUser.uid
+        val databaseRef = FirebaseDatabase.getInstance().getReference("pengeluaran")
+
+        val newRef = databaseRef.push()
+        val pengeluaranBaru = Pengeluaran(
+            id = newRef.key,
+            userId = uid,
+            nama = nama ?: "",
+            jumlah = jumlah,
+            gambarBase64 = gambarBase64
+        )
+
+        newRef.setValue(pengeluaranBaru)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Hapus gambar sementara setelah berhasil simpan
+                    if (!imageKey.isNullOrEmpty()) {
+                        deleteTemporaryImage(imageKey!!)
+                    }
+
+                    Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+                    kembaliKeActivitySebelumnya(pengeluaranBaru)
+                } else {
+                    Toast.makeText(this, "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun deleteTemporaryImage(imageKey: String) {
+        val tempImageRef = FirebaseDatabase.getInstance().getReference("temp_images").child(imageKey)
+        tempImageRef.removeValue()
+    }
+
+    // Kembali ke activity sebelumnya setelah data berhasil disimpan
+    private fun kembaliKeActivitySebelumnya(pengeluaran: Pengeluaran) {
+        val resultIntent = Intent().apply {
+            putExtra("pengeluaranId", pengeluaran.id)
+            putExtra("namaPengeluaran", pengeluaran.nama)
+            putExtra("jumlahPengeluaran", pengeluaran.jumlah)
+            putExtra("gambarBase64", pengeluaran.gambarBase64)
+        }
+        setResult(RESULT_OK, resultIntent)
+
+        // Kembali ke DaftarPengeluaranActivity
+        val intent = Intent(this, DaftarPengeluaranActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
     }
 }
