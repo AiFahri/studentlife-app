@@ -1,14 +1,14 @@
 package com.example.studentlife.model
 
+import com.google.firebase.database.IgnoreExtraProperties
+
+@IgnoreExtraProperties
 data class Task(
-    private var _title: String,
-    val deadline: String,
-    val description: String,
-    val imageURI: String
+    var id: String? = null,
+    var userId: String? = null,
+    var title: String = "",
+    var deadline: String = "",
+    var description: String = "",
+    var gambarBase64: String? = ""
 ) {
-    var title: String
-        get() = "\uD83D\uDCD5 $_title"
-        set(value) {
-            _title = value
-        }
 }
