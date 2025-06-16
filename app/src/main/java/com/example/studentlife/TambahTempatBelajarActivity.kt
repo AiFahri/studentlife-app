@@ -1,9 +1,15 @@
 package com.example.studentlife
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap // Import Bitmap
+import android.graphics.BitmapFactory // Import BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore // Import MediaStore
+import android.util.Base64 // Import Base64
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,160 +18,222 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts // Import ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout // Import ConstraintLayout jika digunakan
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.studentlife.model.TempatBelajar // Import model TempatBelajar Anda
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import kotlin.math.max
 
 class TambahTempatBelajarActivity : AppCompatActivity() {
-    private lateinit var iconUpload: ImageView
+    private lateinit var iconUpload: ImageView // Untuk menampilkan preview gambar yang diupload
+    private lateinit var etNamaTempat: EditText
+    private lateinit var etAlamat: EditText
+    private lateinit var btnSimpanTempat: Button // Menggantikan button_pratinjau
+    private lateinit var tvUploadHint: TextView // Teks "Unggah file disini" jika ada
+    private lateinit var uploadContainer: ConstraintLayout
+
+
     private var selectedImageUri: Uri? = null
-    private var currentEditPosition = -1
+    private var currentBitmap: Bitmap? = null // Untuk menyimpan bitmap yang akan di-encode
+
+    private var isEditMode = false
+    private var existingTempatId: String? = null
+    private var originalGambarBase64: String? = null
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private val TAG = "TambahTempatBelajar"
+
+    // Launcher untuk memilih gambar dari galeri
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null && uri.toString().isNotEmpty()) {
+            try {
+                selectedImageUri = uri
+                currentBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, uri)
+                iconUpload.setImageBitmap(currentBitmap)
+                iconUpload.visibility = View.VISIBLE
+                tvUploadHint.visibility = View.GONE // Sembunyikan hint jika gambar terpilih
+                Log.d(TAG, "Gambar dipilih: $uri")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error memproses URI gambar: $uri", e)
+                Toast.makeText(this, "Gagal memuat gambar", Toast.LENGTH_SHORT).show()
+                resetImagePreviewToDefault()
+            }
+        } else {
+            Log.d(TAG, "Tidak ada gambar yang dipilih.")
+            if (!isEditMode || originalGambarBase64.isNullOrEmpty()) {
+                resetImagePreviewToDefault()
+                currentBitmap = null
+            }
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.enableEdgeToEdge()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_tambah_tempat_belajar)
 
-        currentEditPosition = intent.getIntExtra("itemPosition", -1)
-
-        iconUpload = findViewById(R.id.icon_upload)
-        val uploadContainer = findViewById<ConstraintLayout>(R.id.upload_foto_container)
-
-        uploadContainer.setOnClickListener { v: View? ->
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setType("image/*")
-            startActivityForResult(
-                Intent.createChooser(intent, "Pilih Gambar"),
-                PICK_IMAGE_REQUEST
-            )
-        }
-
-        // Inisialisasi tombol back
-        val btnBack = findViewById<FrameLayout>(R.id.btnBack)
-
-        // Deklarasi input field
-        val etNamaTempat = findViewById<EditText>(R.id.etNamaTempat)
-        val etAlamat = findViewById<EditText>(R.id.etAlamat)
-        val btnPratinjau = findViewById<Button>(R.id.button_pratinjau)
-
-
-        val tvTitle = findViewById<TextView>(R.id.tambah_temp)
-        // Cek apakah sedang dalam mode edit
-        val isEditMode = intent.getBooleanExtra("isEditMode", false)
-        if (isEditMode) {
-            tvTitle.text = "Edit Tempat Belajar"
-        }
-
-        val editNama = intent.getStringExtra("editNamaTempat")
-        val editAlamat = intent.getStringExtra("editAlamatTempat")
-        val editImageUriString = intent.getStringExtra("editImageUri")
-
-        if (editNama != null) etNamaTempat.setText(editNama)
-        if (editAlamat != null) etAlamat.setText(editAlamat)
-        if (editImageUriString != null) {
-            selectedImageUri = Uri.parse(editImageUriString)
-            iconUpload.setImageURI(selectedImageUri)
-        }
-
-        // Event listener tombol back
-        btnBack.setOnClickListener { v: View? ->
-            finish() // Kembali ke ListTempatBelajarActivity
-        }
-
-        // Event listener tombol "Pratinjau"
-        btnPratinjau.setOnClickListener { v: View? ->
-            val namaTempat = etNamaTempat.text.toString().trim { it <= ' ' }
-            val alamatTempat = etAlamat.text.toString().trim { it <= ' ' }
-            if (!namaTempat.isEmpty() && !alamatTempat.isEmpty()) {
-                val intent = Intent(
-                    this@TambahTempatBelajarActivity,
-                    DetailTempatBelajarActivity::class.java
-                )
-                intent.putExtra("namaTempat", namaTempat)
-                intent.putExtra("alamatTempat", alamatTempat)
-                intent.putExtra("itemPosition", currentEditPosition)
-
-                if (selectedImageUri != null) {
-                    intent.putExtra("imageUri", selectedImageUri.toString())
-                }
-
-                startActivityForResult(intent, 2)
-            } else {
-                Toast.makeText(this, "Harap isi semua data!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-            findViewById(R.id.main)
-        ) { v: View, insets: WindowInsetsCompat ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(
-                max(v.paddingLeft.toDouble(), systemBars.left.toDouble()).toInt(),
-                max(v.paddingTop.toDouble(), systemBars.top.toDouble()).toInt(),
-                max(v.paddingRight.toDouble(), systemBars.right.toDouble()).toInt(),
-                max(v.paddingBottom.toDouble(), systemBars.bottom.toDouble()).toInt()
-            )
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
 
-    // TERIMA DATA DARI DetailTempatBelajarActivity DAN KEMBALIKAN KE ListTempatBelajarActivity
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
 
-        if (requestCode == 2 && resultCode == RESULT_OK) {
-            setResult(RESULT_OK, data)
+        iconUpload = findViewById(R.id.icon_upload) // ImageView untuk preview
+        uploadContainer = findViewById(R.id.upload_foto_container) // Container yang bisa diklik
+        tvUploadHint = findViewById(R.id.tvUploadUnderline) // Teks "disini" atau "Unggah file"
+        etNamaTempat = findViewById(R.id.etNamaTempat)
+        etAlamat = findViewById(R.id.etAlamat)
+        btnSimpanTempat = findViewById(R.id.button_pratinjau) // Ganti nama variabel atau ID jika perlu
+        val btnBack = findViewById<FrameLayout>(R.id.btnBack)
+        val tvTitle = findViewById<TextView>(R.id.tambah_temp)
+
+
+        existingTempatId = intent.getStringExtra("tempat_id")
+        if (existingTempatId != null) {
+            isEditMode = true
+            tvTitle.text = "Edit Tempat Belajar" // Sesuaikan string jika perlu
+            btnSimpanTempat.text = "Simpan Perubahan"
+            Log.d(TAG, "Mode Edit. Tempat ID: $existingTempatId")
+            loadExistingTempatData(existingTempatId!!)
+        } else {
+            isEditMode = false
+            tvTitle.text = "Tambah Tempat Belajar" // Sesuaikan string jika perlu
+            btnSimpanTempat.text = "Simpan" // Sesuaikan string jika perlu
+            resetImagePreviewToDefault()
+            Log.d(TAG, "Mode Tambah Baru.")
+        }
+
+        btnBack.setOnClickListener {
             finish()
         }
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
-            val originalUri = data.data
-            selectedImageUri =
-                saveImageToInternalStorage(originalUri!!) // ⬅ Gunakan URI hasil salinan
+        uploadContainer.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+        iconUpload.setOnClickListener { // Izinkan klik pada gambar untuk memilih ulang
+            pickImageLauncher.launch("image/*")
+        }
 
-            try {
-                val inputStream = contentResolver.openInputStream(
-                    selectedImageUri!!
-                )
-                val drawable = Drawable.createFromStream(inputStream, selectedImageUri.toString())
-                iconUpload!!.setImageDrawable(drawable)
-                inputStream?.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this, "Gagal memuat gambar.", Toast.LENGTH_SHORT).show()
-            }
+        btnSimpanTempat.setOnClickListener {
+            saveOrUpdateTempatBelajar()
         }
     }
 
-    private fun saveImageToInternalStorage(sourceUri: Uri): Uri? {
-        try {
-            val inputStream = contentResolver.openInputStream(sourceUri)
-            val file = File(filesDir, "upload_" + System.currentTimeMillis() + ".jpg")
-            val outputStream: OutputStream = FileOutputStream(file)
+    private fun resetImagePreviewToDefault() {
+        iconUpload.setImageResource(R.drawable.ic_upload) // Pastikan drawable ini ada
+        iconUpload.visibility = View.VISIBLE // Atau sesuai desain awal Anda
+        tvUploadHint.visibility = View.VISIBLE // Tampilkan kembali hint
+        currentBitmap = null
+        selectedImageUri = null
+    }
 
-            val buffer = ByteArray(4096)
-            var bytesRead: Int
-            while ((inputStream!!.read(buffer).also { bytesRead = it }) != -1) {
-                outputStream.write(buffer, 0, bytesRead)
+    private fun loadExistingTempatData(tempatId: String) {
+        val tempatRef = database.reference.child("tempat_belajar").child(tempatId) // Sesuaikan path jika perlu
+        tempatRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val tempat = snapshot.getValue(TempatBelajar::class.java)
+                if (tempat != null) {
+                    etNamaTempat.setText(tempat.nama)
+                    etAlamat.setText(tempat.alamat)
+                    originalGambarBase64 = tempat.gambarBase64
+                    if (!originalGambarBase64.isNullOrEmpty()) {
+                        try {
+                            currentBitmap = decodeBase64ToBitmap(originalGambarBase64!!)
+                            if (currentBitmap != null) {
+                                iconUpload.setImageBitmap(currentBitmap)
+                                tvUploadHint.visibility = View.GONE
+                            } else { resetImagePreviewToDefault() }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error decode Base64 lama", e)
+                            resetImagePreviewToDefault()
+                        }
+                    } else {
+                        resetImagePreviewToDefault()
+                    }
+                } else {
+                    Toast.makeText(this@TambahTempatBelajarActivity, "Gagal memuat data tempat.", Toast.LENGTH_SHORT).show()
+                }
             }
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@TambahTempatBelajarActivity, "Gagal memuat data: ${error.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
 
-            inputStream.close()
-            outputStream.close()
+    private fun encodeBitmapToBase64(bitmap: Bitmap?): String? {
+        if (bitmap == null) return null
+        val outputStream = ByteArrayOutputStream()
+        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, 480, (bitmap.height.toFloat() / bitmap.width.toFloat() * 480).toInt(), true)
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream)
+        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
+    }
 
-            return Uri.fromFile(file) // URI yang valid permanen di internal app
+    private fun decodeBase64ToBitmap(base64Str: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+            Log.e(TAG, "Gagal decode Base64 ke Bitmap", e); null
         }
     }
 
-    companion object {
-        private const val PICK_IMAGE_REQUEST = 100
+    private fun saveOrUpdateTempatBelajar() {
+        val namaTempat = etNamaTempat.text.toString().trim()
+        val alamatTempat = etAlamat.text.toString().trim()
+
+        if (namaTempat.isEmpty() || alamatTempat.isEmpty()) {
+            Toast.makeText(this, "Nama tempat dan alamat wajib diisi!", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            Toast.makeText(this, "User belum login.", Toast.LENGTH_LONG).show()
+            return
+        }
+        val userId = currentUser.uid
+
+        val gambarBase64ToSave = encodeBitmapToBase64(currentBitmap) ?: if (isEditMode) originalGambarBase64 else ""
+
+        val tempatIdToSave = if (isEditMode) existingTempatId!! else database.reference.child("tempat_belajar").push().key!!
+
+        val tempatBelajar = TempatBelajar(
+            id = tempatIdToSave,
+            userId = userId,
+            nama = namaTempat,
+            alamat = alamatTempat,
+            gambarBase64 = gambarBase64ToSave
+        )
+
+        Log.d(TAG, "Menyimpan tempat belajar: $tempatBelajar")
+        database.reference.child("tempat_belajar").child(tempatIdToSave).setValue(tempatBelajar)
+            .addOnSuccessListener {
+                val message = if (isEditMode) "Tempat belajar berhasil diperbarui" else "Tempat belajar berhasil disimpan"
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "$message. ID: $tempatIdToSave")
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+            .addOnFailureListener { e ->
+                val message = if (isEditMode) "Gagal memperbarui tempat" else "Gagal menyimpan tempat"
+                Toast.makeText(this, "$message: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e(TAG, message, e)
+            }
     }
 }
